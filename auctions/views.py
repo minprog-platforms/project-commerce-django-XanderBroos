@@ -13,9 +13,14 @@ def index(request):
         "list": entries
     })
 
-def listing(request, listing):
-    return render(request, "auctions/listing/{listing}.html", {
-        "test": listing
+def listing(request, name):
+    try:
+        hallo = Listing.objects.get(title=f"{name}")
+    except Listing.DoesNotExist:
+        hallo = None
+    return render(request, "auctions/listing.html", {
+        "item_title": name,
+        "image": hallo
     })
     pass
 def create(request):

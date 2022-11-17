@@ -16,7 +16,7 @@ class Listing(models.Model):
     image = models.CharField(max_length=1000)
 
     def __str__(self) -> str:
-        return f"{self.title}\n{self.description}"
+        return f"{self.title}"
     pass
 
 
@@ -26,4 +26,6 @@ class Bid(models.Model):
     pass
 
 class Comment(models.Model):
+    # commenter =models.ForeignKey(User, on_delete=models.CASCADE, blank=True, related_name="user")
+    # comment =  models.CharField(max_length=1000)
     pass
