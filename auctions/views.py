@@ -8,9 +8,16 @@ from .models import User, Listing
 
 
 def index(request):
+    entries = Listing.objects.filter(active=True)
+    return render(request, "auctions/index.html", {
+        "list": entries
+    })
 
-    return render(request, "auctions/index.html")
-
+def listing(request, listing):
+    return render(request, "auctions/listing/{listing}.html", {
+        "test": listing
+    })
+    pass
 def create(request):
     if request.method == "POST":
         title = request.POST["title"]
