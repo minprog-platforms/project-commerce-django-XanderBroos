@@ -15,26 +15,42 @@ def index(request):
 
 def listing(request, name):
     try:
-        hallo = Listing.objects.get(title=f"{name}")
+        item = Listing.objects.get(title=f"{name}")
     except Listing.DoesNotExist:
-        hallo = None
-    return render(request, "auctions/listing.html", {
-        "item_title": name,
-        "image": hallo
-    })
+        item = None
+    if request.method == "GET":
+        return render(request, "auctions/listing.html", {
+            "item": item
+        })
+    else:
+        # bid_item = Listing.objects.get(title=f"{name}")
+        bid = int(request.POST["bid"])
+        # user = request.user
+        if bid > item.current_bid:
+            item.current_bid = bid
+            item.save()
+        return HttpResponseRedirect(reverse(index))
+        return render(request, "auctions/listing.html", {
+            "item": item
+        })
+
     pass
+
+
 def create(request):
     if request.method == "POST":
         title = request.POST["title"]
         description =request.POST["desc"]
         bid =request.POST["bid"]
         url =request.POST["url"]
+        min_bid = request.POST["min_bid"]
         user = request.user
         
         new_listing = Listing(
             title=title,
             description=description,
             price=bid,
+            min_bid=min_bid,
             active=True,
             owner=user,
             image=url)
