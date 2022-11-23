@@ -8,6 +8,14 @@
         {{entry.description}}<br>
 
         <img src="{{entry.image}}" width="200"><br><br>
-        $ {{entry.price}}
+        $ {{entry.price}}. Wordt verkocht door {{entry.owner}}
+    {% endfor %}
+    <h2>CLOSED LISTINGS</h2>
+    {% for entry in other_list %}
+        <h1><a href="listing/{{entry}}">{{entry.title}}</a></h1>
+        {{entry.description}}<br>
+
+        <img src="{{entry.image}}" width="200"><br><br>
+        $ {{entry.price}}. Wordt verkocht door {{entry.owner}}
     {% endfor %}
 {% endblock %}

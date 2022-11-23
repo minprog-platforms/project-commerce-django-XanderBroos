@@ -1,23 +1,65 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+    {% if con %}
+        <h1>{{test}}</h1>
+        
+    {% else %}
+        <h2>CURRENT LISTINGS</h2>
+        <form action="{{item.title}}" >
+            {% csrf_token %}
+            <input type="checkbox" name="watch" value="Bike">
+            <label for="watch"> Add to watchlist, werkt nog niet, pas wanneer er ook een watchlist pagina is. </label><br>
+            <input type="submit" value="Toevoegen aan watchlist">
+        </form>
+        
+        
 
-    <h1>{{item.title}}: ${{item.price}} Koopprijs</h1>
-    <img src="{{item.image}}" width="300">
-    <br>
-    {{item.description}}
-    <br>
-    <h3>Dit is de minimum prijs voor een bod: {{ item.min_bid }}</h3>
 
-    <form action="{{item.title}}" method="POST">
-        {% csrf_token %}
-        <input type="number" min="{{image.min_bid}}" max="{{image.price}}" name="bid">
-        <input type="submit" value="Bod doen">
-    </form>
-    <br>
-    <h2>Dit is het huidige bod {{ item.current_bid }} van {{item.bidder}}</h2>
-    <h1>Comments</h1>
+        <h1>{{item.title}}: ${{item.price}} Koopprijs</h1>
+        <img src="{{item.image}}" width="300">
+        <br>
+        {{item.description}}
+        <br>
+        {% if user.is_authenticated %}
+            <h3>Dit is de minimum prijs voor een bod: {{ item.min_bid }}</h3>
+
+            <form action="{{item.title}}" method="POST">
+                {% csrf_token %}
+                <input type="number" min="{{image.min_bid}}" max="{{image.price}}" name="bid">
+                <input type="submit" value="Bod doen">
+            </form>
+            <br>
+            <h2>Dit is het huidige hoogste bod {{ item.current_bid }} van {{item.current_bidder}}</h2>
+
+        {% else %}
+        <h1>Log in om de bidprijs te zien en mee te bieden</h1>
+        {% endif %}
+
+        <form method="POST" action="{{item.title}}">
+            <br>
+            {% csrf_token %}
+            
+            <label>Comment Space</label><p>
+            <input type="text" name="comment">
+            <input type="submit" class= "btn btn-primary" value="Submit comment">
+        </form>
+        {% if accept %}
+        <form action="{{item.title}}" method="POST">
+            {% csrf_token %}
+            <label>Type "done" if you want to terminate this item</label><p></p>
+            <input type="text" name="done">
+            <input type="submit" value="Send">
+        </form>
+        {% else %}
+        {% endif %}
+    {% endif %}
+
+    <h1>comments!</h1>
+    {% for comments in comment %}
+        {{comments.comment_user}}:
+        {{comments.comment_tekst}}<hr>
+    {% endfor %}
     
 
     <!-- {% if user.is_authenticated %}
